@@ -26,7 +26,8 @@ module.exports.controller = (app) => {
             function () {
                 console.log('Successfully uploaded the file to s3');
                 // This is wrong
-                const url = `${req.headers.host}:${process.env.PORT || 3000}/query?file_id=${key}`;
+                const port = process.env.PORT ? '' : `:${3000}`;
+                const url = `${req.headers.host}${port}/query?file_id=${key}`;
                 res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
             },
             function (err) {

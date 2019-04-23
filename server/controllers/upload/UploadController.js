@@ -1,4 +1,5 @@
 const csv = require('csvtojson');
+const os = require('os');
 const {uploadFileToS3, validateCsvInput} = require('../../helpers');
 
 module.exports.controller = (app) => {
@@ -22,16 +23,15 @@ module.exports.controller = (app) => {
 
         const key = `file_${new Date().getTime()}`;
 
-        function success () {
-            console.log('Successfully uploaded the file to s3')
-            res.json({"Success": true, "file_name": key});
-        }
-
-        function failure () {
-            console.log('Did not upload the file to s3')
-            res.json({"Success": false, "file_name": key});
-        }
-
-        uploadFileToS3(path, key, success, failure);
+        uploadFileToS3(path, key,
+            function () {
+                console.log('Successfully uploaded the file to s3');
+                const url = `${os.hostname()}:${process.env.PORT || 3000}/query?file_id=${key}`;
+                res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
+            },
+            function () {
+                console.log('Did not upload the file to s3')
+                res.json({"Success": false, "message": "Did not upload the file to s3"});
+            });
     });
 };

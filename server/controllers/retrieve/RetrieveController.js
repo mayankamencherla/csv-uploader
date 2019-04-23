@@ -1,4 +1,4 @@
-const {getItem, validateQueryInput} = require('../../helpers');
+const {validateQueryInput, getFileUrl} = require('../../helpers');
 
 module.exports.controller = (app) => {
 
@@ -9,27 +9,18 @@ module.exports.controller = (app) => {
         if (!validateQueryInput(req.query)) {
             res.json({
                 "Success": false,
-                "message": "type, id and timestamp need to be passed in the query params"
+                "message": "file_id need to be passed in the query params"
             });
 
             return;
         }
 
-        console.log(`Request to retrieve ${req.query.type} ${req.query.id} at ${req.query.timestamp}`);
+        console.log(`Request to retrieve ${req.query.file_id}`);
 
-        var result = await getItem(req.query.type, req.query.id, req.query.timestamp);
+        const id = req.query.file_id;
 
-        let changes = "null";
-        if (result !== undefined) {
-            changes = result.changes;
-        }
+        const url = getFileUrl(id);
 
-        changes = JSON.parse(changes);
-
-        if (typeof changes === 'string') {
-            changes = JSON.parse(changes);
-        }
-
-        res.json({"Success": changes !== "null", "result": changes});
+        res.json({"Success": true, "url": url});
     });
 };

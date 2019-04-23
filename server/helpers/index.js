@@ -29,8 +29,7 @@ async function uploadFileToS3(file, key, success, failure) {
     // Streaming to avoid loading entire csv in memory
     await csv({noheader:true, output: "line"}).fromFile(file).subscribe(
         function (row) {
-            if (data.length > 0) data += '|';
-            data += row;
+            data += (data.length > 0) ? '|' + row : '' + row;
         });
 
     s3.putObject({

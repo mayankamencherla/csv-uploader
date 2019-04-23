@@ -23,8 +23,6 @@ module.exports.controller = (app) => {
             return;
         }
 
-        // const sendFile = util.promisify(res.sendFile);
-
         console.log(`Request to retrieve ${req.query.file_id}`);
 
         const id = req.query.file_id;

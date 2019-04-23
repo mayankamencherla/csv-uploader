@@ -24,8 +24,6 @@ function validateQueryInput(query) {
 }
 
 async function uploadFileToS3(file, key, success, failure) {
-    // const data = JSON.stringify(await csv().fromFile(file));
-
     let data = '';
 
     // Streaming to avoid loading entire csv in memory

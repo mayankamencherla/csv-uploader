@@ -29,8 +29,8 @@ module.exports.controller = (app) => {
                 const url = `${os.hostname()}:${process.env.PORT || 3000}/query?file_id=${key}`;
                 res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
             },
-            function () {
-                console.log('Did not upload the file to s3')
+            function (err) {
+                console.log('Did not upload the file to s3: ' + err)
                 res.json({"Success": false, "message": "Did not upload the file to s3"});
             });
     });

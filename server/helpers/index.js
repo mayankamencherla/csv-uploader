@@ -24,14 +24,23 @@ function validateQueryInput(query) {
 }
 
 async function uploadFileToS3(file, key, success, failure) {
-    const data = JSON.stringify(await csv().fromFile(file));
+    // const data = JSON.stringify(await csv().fromFile(file));
+
+    let data = '';
+
+    // Streaming to avoid loading entire csv in memory
+    await csv({noheader:true, output: "line"}).fromFile(file).subscribe(
+        function (row) {
+            if (data.length > 0) data += '|';
+            data += row;
+        });
 
     s3.putObject({
         Bucket: 'csv-bucket-2401',
         Key: key,
         Body: data
     }, (err, data) => {
-        if (err) failure()
+        if (err) failure(err)
         else success()
     });
 }

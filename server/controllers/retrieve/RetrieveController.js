@@ -39,10 +39,7 @@ module.exports.controller = (app) => {
             fs.mkdirSync(__dirname + '/tmp');
         }
 
-        const csv = json2csv(file.data, {
-            fields: Object.keys(file.data[0]),
-            quote: ''
-        });
+        let csv = file.data.split('|').join("\n");
 
         await writeFile(path, csv);
 

@@ -8,12 +8,10 @@ module.exports.controller = (app) => {
      */
     app.post('/csv', async (req, res, next) => {
         if (!validateCsvInput(req)) {
-            res.json({
+            return res.json({
                 "Success": false,
                 "message": "File needs to be updloaded via the file parameter in the request"
             });
-
-            return;
         }
 
         const path = req.files.file.tempFilePath;
@@ -25,9 +23,7 @@ module.exports.controller = (app) => {
         uploadFileToS3(path, key,
             function () {
                 console.log('Successfully uploaded the file to s3');
-                // This is wrong
-                const port = process.env.PORT ? '' : `:${3000}`;
-                const url = `${req.headers.host}${port}/query?file_id=${key}`;
+                const url = `${req.headers.host}/query?file_id=${key}`;
                 res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
             },
             function (err) {

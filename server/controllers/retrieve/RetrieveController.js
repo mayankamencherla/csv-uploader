@@ -15,12 +15,10 @@ module.exports.controller = (app) => {
      */
     app.get('/query', async (req, res, next) => {
         if (!validateQueryInput(req.query)) {
-            res.json({
+            return res.json({
                 "Success": false,
                 "message": "file_id need to be passed in the query params"
             });
-
-            return;
         }
 
         console.log(`Request to retrieve ${req.query.file_id}`);
@@ -29,7 +27,17 @@ module.exports.controller = (app) => {
 
         const url = getFileUrl(id);
 
-        const file = await axios.get(url);
+        let file;
+
+        try {
+            file = await axios.get(url);
+        } catch (e) {
+            return res.json({
+                "Success": false,
+                "message": "Unable to download file from s3 " + e
+            });
+        }
+
 
         const path = __dirname + `/tmp/${id}.csv`;
 
@@ -39,7 +47,14 @@ module.exports.controller = (app) => {
 
         let csv = file.data.split('|').join("\n");
 
-        await writeFile(path, csv);
+        try {
+            await writeFile(path, csv);
+        } catch (e) {
+            return res.json({
+                "Success": false,
+                "message": "Unable to write to csv file " + e
+            });
+        }
 
         console.log('Wrote to file');
 

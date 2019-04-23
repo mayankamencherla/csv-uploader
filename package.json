@@ -18,7 +18,14 @@
     "express": "^4.16.4",
     "express-fileupload": "^1.1.4",
     "express-rate-limit": "^3.4.1",
+    "form-data": "^2.3.3",
+    "json2csv": "^4.5.0",
     "mongodb": "^3.2.3",
-    "mongoose": "^5.5.2"
+    "mongoose": "^5.5.2",
+    "rimraf": "^2.6.3",
+    "util.promisify": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
   }
 }

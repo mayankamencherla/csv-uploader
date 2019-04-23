@@ -19,7 +19,7 @@ $ git clone https://github.com/mayankamencherla/csv-uploader.git
 
 ## Setup Locally
 > To get the app working locally, or to run test cases, follow the instructions below.
-> After setting up the app, details on each API and how to use it can be found below in the **[API's available on this app](https://github.com/mayankamencherla/truelayer-interview-app#apis-available-on-this-app)** section.
+> After setting up the app, details on each API and how to use it can be found below in the **[API's available on this app](https://github.com/mayankamencherla/csv-uploader#apis-available-on-this-app)** section.
 > If any of the commands below are denied due to a permission error, please prepend a sudo to the command.
 
 1. Navigate to the app's root directory

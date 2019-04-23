@@ -57,3 +57,20 @@ Some key environment variables are listed and explained below:
 ## API's available on this app
 > This app supports 2 API's currently
 
+1. POST <a href="http://localhost:3000/csv" target="_blank">/csv</a>
+    - Allows your to upload your CSV via to be stored by the app
+    - The file needs to be uploaded via the *file* post parameter
+    - Returns the download link of the file in the *download* parameter
+    - Example:
+    ```
+    {
+        "Success": true,
+        "download": "<host>:<PORT>/query?file_id=file_<ID>",
+        "message": "Just paste the download url in the browser to download the file"
+    }
+    ```
+
+2. GET <a href="http://localhost:3000/query?file_id=file_34234234" target="_blank">/query</a>
+    - Allows you to download the csv using the download link
+    - The URL can be pasted into the browser to get the CSV into your system
+    - Example: <host>:<PORT>/query?file_id=file_<ID>

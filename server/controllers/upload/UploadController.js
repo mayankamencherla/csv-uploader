@@ -16,16 +16,13 @@ module.exports.controller = (app) => {
         }
 
         try {
-            await setUserInRequest(req);
+            await setUserInRequest(req, res);
         } catch (e) {
             return res.json({
                 "Success": false,
                 "message": "Unable to authenticate the user, please try again later: " + e
             });
         }
-
-        // Setting the token as x-auth header in the response
-        res.setHeader('x-auth', req.header['x-auth']);
 
         const path = req.files.file.tempFilePath;
 

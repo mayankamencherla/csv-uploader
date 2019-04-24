@@ -4,7 +4,7 @@ async function authenticate(req, res, next) {
     var token = req.header('x-auth');
 
     if (token === undefined) {
-        throw new "x-auth Token not set in the request"
+        throw new Error("x-auth Token not set in the request")
     }
 
     try {
@@ -15,9 +15,8 @@ async function authenticate(req, res, next) {
 
     try {
         const file = await getFile(req.query.file_id, req.user._id);
-        console.log(file);
         if (file === undefined || file === null) {
-            throw new "Unable to find file attached to given user";
+            throw new Error("Unable to find file attached to given user");
         }
     } catch (e) {
         throw e;

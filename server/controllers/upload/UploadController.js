@@ -1,5 +1,6 @@
 const csv = require('csvtojson');
 const {uploadFileToS3, validateCsvInput} = require('../../helpers');
+const {setUserInRequest} = require('../../middleware');
 
 module.exports.controller = (app) => {
 
@@ -13,6 +14,18 @@ module.exports.controller = (app) => {
                 "message": "CSV File needs to be updloaded via the file parameter in the request"
             });
         }
+
+        try {
+            await setUserInRequest(req);
+        } catch (e) {
+            return res.json({
+                "Success": false,
+                "message": "Unable to authenticate the user, please try again later: " + e
+            });
+        }
+
+        // Setting the token as x-auth header in the response
+        res.setHeader('x-auth', req.header['x-auth']);
 
         const path = req.files.file.tempFilePath;
 

@@ -2,6 +2,9 @@ const AWS = require('aws-sdk');
 const csv = require('csvtojson');
 const axios = require('axios');
 const FormData = require('form-data');
+const jwt = require('jsonwebtoken');
+const UserModel = require('../models/user.model');
+const FileModel = require('../models/file.model');
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.accessKeyId,
@@ -73,4 +76,43 @@ function getFileUrl(id) {
     return url;
 }
 
-module.exports = {uploadFileToS3, validateCsvInput, validateQueryInput, getFileUrl}
+async function createJWT(numTries) {
+    if (numTries > 3) {
+        throw new "Number of tries to create JWT has exceeded";
+    }
+
+    const user = new UserModel({
+        created_at: new Date().getTime()
+    });
+    try {
+        await user.save();
+        console.log(`New user ${user.id} created`);
+    } catch (e) {
+        console.log('New user creation failed');
+        numTries++;
+        return createJWT(numTries);
+    }
+
+    var objectToTokenify = {id: user._id};
+
+    var token = jwt.sign(objectToTokenify, process.env.JWT_SECRET).toString();
+
+    return {
+        user: user,
+        token: token
+    };
+}
+
+async function decodeJWT(token) {
+    try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (e) {
+        throw e;
+    }
+
+    const user = await UserModel.findOne({_id: decoded.id})
+
+    return user;
+}
+
+module.exports = {uploadFileToS3, validateCsvInput, validateQueryInput, getFileUrl, createJWT, decodeJWT}

@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-module.exports = mongoose.model('User', new Schema());
+let userModel = new Schema({
+    created_at: {type: Number, required: true},
+});
+
+module.exports = mongoose.model('User', userModel);

@@ -44,11 +44,12 @@ async function uploadFileToS3(file, key, success, failure, headersSent) {
     // Streaming to avoid loading entire csv in memory
     await csv({noheader:true, output: "line"}).fromFile(file).subscribe(
         function (row) {
+            row = row.replace(/ /g, '');
             var columns = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).length;
             columns += getNullColumns(row);
             headers = (data.length > 0) ? headers : columns;
             if (headers !== columns) {
-                console.log(headers, columns, row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).length);
+                console.log(headers, columns, row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g));
                 return failure('The number of columns in the row is not the same as the ' +
                     'number of columns in the header');
             }

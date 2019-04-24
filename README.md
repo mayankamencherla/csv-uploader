@@ -61,6 +61,7 @@ Some key environment variables are listed and explained below:
     - Allows your to upload your CSV via to be stored by the app
     - The file needs to be uploaded via the *file* post parameter
     - Returns the download link of the file in the *download* parameter
+    - Returns the user's authentication token as the x-auth parameter in the response headers
     - Example:
     ```
     {
@@ -73,4 +74,5 @@ Some key environment variables are listed and explained below:
 2. GET <a href="http://localhost:3000/query?file_id=file_34234234" target="_blank">/query</a>
     - Allows you to download the csv using the download link
     - The URL can be pasted into the browser to get the CSV into your system
+    - The user's authentication token that was returned by the csv upload endpoint must be used as the x-auth token in the request
     - Example: `<host>:<PORT>/query?file_id=file_<ID>`

@@ -1,7 +1,6 @@
 const {validateQueryInput, getFileUrl} = require('../../helpers');
 const axios = require('axios');
 const fs = require('fs');
-const json2csv = require('json2csv').parse;
 const rimraf = require('rimraf');
 const util = require('util');
 require('util.promisify').shim();

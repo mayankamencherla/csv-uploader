@@ -25,14 +25,24 @@ function validateQueryInput(query) {
     return true;
 }
 
-async function uploadFileToS3(file, key, success, failure) {
+async function uploadFileToS3(file, key, success, failure, headersSent) {
     let data = '';
+
+    let headers = 0;
 
     // Streaming to avoid loading entire csv in memory
     await csv({noheader:true, output: "line"}).fromFile(file).subscribe(
         function (row) {
+            const columns = data.split(',').length;
+            headers = (data.length > 0) ? headers : columns;
+            if (headers !== columns) {
+                return failure('The number of columns in the row is not the same as the ' +
+                    'number of columns in the header');
+            }
             data += (data.length > 0) ? '|' + row : '' + row;
         });
+
+    if (headersSent()) return;
 
     s3.putObject({
         Bucket: 'csv-bucket-2401',

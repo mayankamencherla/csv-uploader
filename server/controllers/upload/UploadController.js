@@ -22,13 +22,15 @@ module.exports.controller = (app) => {
 
         uploadFileToS3(path, key,
             function () {
-                console.log('Successfully uploaded the file to s3');
                 const url = `${req.headers.host}/query?file_id=${key}`;
-                res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
+                return res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
             },
             function (err) {
-                console.log('Did not upload the file to s3: ' + err)
-                res.json({"Success": false, "message": "Did not upload the file to s3"});
+                if (res.headersSent) return;
+                return res.json({"Success": false, "message": "Did not upload the file to s3: " + err});
+            },
+            function () {
+                return res.headersSent;
             });
     });
 };

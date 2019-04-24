@@ -13,10 +13,14 @@ async function authenticate(req, res, next) {
         throw e;
     }
 
-    const file = getFile(req.query.file_id, req.user._id);
-
-    if (file === undefined) {
-        throw new "Unable to find file attached to given user";
+    try {
+        const file = await getFile(req.query.file_id, req.user._id);
+        console.log(file);
+        if (file === undefined || file === null) {
+            throw new "Unable to find file attached to given user";
+        }
+    } catch (e) {
+        throw e;
     }
 }
 

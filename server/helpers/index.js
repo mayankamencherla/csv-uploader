@@ -15,6 +15,8 @@ function validateCsvInput(request) {
 
     else if (!request.files.hasOwnProperty('file')) return false;
 
+    else if (request.files.file.mimetype !== 'text/csv') return false;
+
     return true;
 }
 

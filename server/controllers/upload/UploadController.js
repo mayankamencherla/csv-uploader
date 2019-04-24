@@ -10,7 +10,7 @@ module.exports.controller = (app) => {
         if (!validateCsvInput(req)) {
             return res.json({
                 "Success": false,
-                "message": "File needs to be updloaded via the file parameter in the request"
+                "message": "CSV File needs to be updloaded via the file parameter in the request"
             });
         }
 

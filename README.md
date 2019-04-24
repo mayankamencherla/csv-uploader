@@ -43,7 +43,7 @@ $ npm start
 
 6. Head over to <a href="http://localhost:3000" target="_blank">localhost:3000</a> on your browser to see Success = true
 
-7. To use this app on heroku, please head over to <a href="https://protected-basin-69617.herokuapp.com" target="_blank">heroku</a>
+7. To use this app on heroku, please head over to <a href="https://gentle-mountain-30189.herokuapp.com" target="_blank">heroku</a>
 
 ## Environment variables
 Environment variables are picked up from the .env file, which must be created in the app's root directory.
@@ -73,4 +73,4 @@ Some key environment variables are listed and explained below:
 2. GET <a href="http://localhost:3000/query?file_id=file_34234234" target="_blank">/query</a>
     - Allows you to download the csv using the download link
     - The URL can be pasted into the browser to get the CSV into your system
-    - Example: <host>:<PORT>/query?file_id=file_<ID>
+    - Example: `<host>:<PORT>/query?file_id=file_<ID>`

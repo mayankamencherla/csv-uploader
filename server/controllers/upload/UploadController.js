@@ -1,6 +1,6 @@
 const csv = require('csvtojson');
 const {uploadFileToS3, validateCsvInput} = require('../../helpers');
-const {setUserInRequest} = require('../../middleware');
+const {setTokenInResponse} = require('../../middleware');
 
 module.exports.controller = (app) => {
 
@@ -16,7 +16,7 @@ module.exports.controller = (app) => {
         }
 
         try {
-            await setUserInRequest(req, res);
+            await setTokenInResponse(req, res);
         } catch (e) {
             return res.json({
                 "Success": false,

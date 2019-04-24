@@ -1,6 +1,26 @@
-const {createJWT, decodeJWT} = require('../helpers');
+const {createJWT, decodeJWT, getFile} = require('../helpers');
 
-async function setUserInRequest(req, res) {
+async function authenticate(req, res, next) {
+    var token = req.header('x-auth');
+
+    if (token === undefined) {
+        throw new "x-auth Token not set in the request"
+    }
+
+    try {
+        req.user = await decodeJWT(token);
+    } catch (e) {
+        throw e;
+    }
+
+    const file = getFile(req.query.file_id, req.user._id);
+
+    if (file === undefined) {
+        throw new "Unable to find file attached to given user";
+    }
+}
+
+async function setTokenInResponse(req, res) {
     var token = req.header('x-auth');
 
     if (token === undefined) {
@@ -14,5 +34,6 @@ async function setUserInRequest(req, res) {
 }
 
 module.exports = {
-    setUserInRequest
+    setTokenInResponse,
+    authenticate
 }

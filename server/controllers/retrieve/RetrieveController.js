@@ -4,6 +4,7 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const util = require('util');
 require('util.promisify').shim();
+const {authenticate} = require('../../middleware');
 
 const writeFile = util.promisify(fs.writeFile);
 
@@ -18,6 +19,15 @@ module.exports.controller = (app) => {
                 "Success": false,
                 "message": "file_id need to be passed in the query params"
             });
+        }
+
+        try {
+            await authenticate(req, res, next);
+        } catch (e) {
+            return res.json({
+                "Success": false,
+                "message": "Unable to authenticate the user: " + e
+            })
         }
 
         console.log(`Request to retrieve ${req.query.file_id}`);

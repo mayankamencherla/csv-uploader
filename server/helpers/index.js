@@ -111,8 +111,14 @@ async function decodeJWT(token) {
     }
 
     const user = await UserModel.findOne({_id: decoded.id})
-
     return user;
 }
 
-module.exports = {uploadFileToS3, validateCsvInput, validateQueryInput, getFileUrl, createJWT, decodeJWT}
+async function getFile(file_id, user_id) {
+    const file = await FileModel.findOne({file_id: file_id, user_id: user_id});
+    return file;
+}
+
+module.exports = {
+    uploadFileToS3, validateCsvInput, validateQueryInput, getFileUrl, createJWT, decodeJWT, getFile
+}

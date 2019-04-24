@@ -39,10 +39,35 @@ function getNullColumns(row) {
     return nulls;
 }
 
-async function uploadFileToS3(file, key, success, failure, headersSent) {
+async function saveFileToDb(key, user, failure, numTries) {
+    if (numTries > 3) {
+        return failure("Number of tries to save file to DB has exceeded");
+    }
+
+    const file = new FileModel({
+        user_id: user._id.toString(),
+        file_id: key
+    });
+
+    try {
+        await file.save();
+        console.log(`New file ${file.id} created`);
+    } catch (e) {
+        console.log('New file creation failed');
+        numTries++;
+        return saveFileToDb(key, user, failure, numTries);
+    }
+}
+
+async function uploadFileToS3(file, key, user, success, failure, headersSent) {
     let data = '';
 
     let headers = 0;
+
+    // Save file name to the file table
+    await saveFileToDb(key, user, failure, 1);
+
+    if (headersSent()) return;
 
     // Streaming to avoid loading entire csv in memory
     await csv({noheader:true, output: "line"}).fromFile(file).subscribe(
@@ -95,6 +120,8 @@ async function createJWT(numTries) {
 
     var objectToTokenify = {id: user._id};
 
+    console.log(objectToTokenify);
+
     var token = jwt.sign(objectToTokenify, process.env.JWT_SECRET).toString();
 
     return {
@@ -115,7 +142,7 @@ async function decodeJWT(token) {
 }
 
 async function getFile(file_id, user_id) {
-    const file = await FileModel.findOne({file_id: file_id, user_id: user_id});
+    const file = await FileModel.findOne({file_id: file_id, user_id: user_id.toString()});
     return file;
 }
 

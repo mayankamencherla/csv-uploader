@@ -32,7 +32,12 @@ async function setTokenInResponse(req, res) {
         res.setHeader('x-auth', created.token);
         req.user = created.user;
     } else {
-        req.user = decodeJWT(token);
+        try {
+            req.user = await decodeJWT(token);
+        } catch (e) {
+            throw e;
+        }
+
         res.setHeader('x-auth', req.header('x-auth'));
     }
 }

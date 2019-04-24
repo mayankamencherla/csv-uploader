@@ -30,7 +30,7 @@ module.exports.controller = (app) => {
 
         const key = `file_${new Date().getTime()}`;
 
-        uploadFileToS3(path, key,
+        uploadFileToS3(path, key, req.user,
             function () {
                 const url = `${req.headers.host}/query?file_id=${key}`;
                 return res.json({"Success": true, "download": url, "message": "Just paste the download url in the browser to download the file"});
